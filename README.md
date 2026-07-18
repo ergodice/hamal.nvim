@@ -40,7 +40,7 @@ A minimal usage example is as follows.
 
 ```lua
 {
-    dir = "~/.config/nvim-plugins/hamal.nvim",
+    "ergodice/hamal.nvim"
     config = function()
         local hamal = require("hamal")
 
