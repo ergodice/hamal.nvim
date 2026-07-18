@@ -1,0 +1,101 @@
+local M = {}
+
+local state = require("hamal.state")
+local defaults = require("hamal.config")
+local split_utils = require("hamal.split_utils")
+local Controller = require("hamal.controller")
+
+local Searcher = require("hamal.searcher")
+
+function M.setup(opts)
+    opts = opts or {}
+    state.opts = vim.tbl_deep_extend("force", defaults, opts)
+    state.ns = vim.api.nvim_create_namespace("hamal")
+
+    for _, hl in ipairs(state.opts.highlights) do
+        local name, spec = hl[1], hl[2]
+        -- register highlights
+        vim.api.nvim_set_hl(0, name, spec)
+    end
+end
+
+function M.split()
+    local winid = vim.api.nvim_get_current_win()
+    local split, err = split_utils.displayed_lines(winid)
+    require("hamal.utils").assert(split, err)
+
+    local searcher = Searcher.new(winid, state.opts.divisions, split)
+    local controller = Controller.new(searcher)
+
+    state.controllers[winid] = controller
+    controller:split()
+end
+
+function M.focus(index)
+    local winid = vim.api.nvim_get_current_win()
+    local controller = state.controllers[winid]
+    if controller == nil then
+        return
+    end
+
+    controller:focus(index)
+end
+
+function M.pan_focus()
+    local winid = vim.api.nvim_get_current_win()
+    local controller = state.controllers[winid]
+    if controller == nil then
+        return
+    end
+
+    controller:pan_focus()
+end
+
+function M.quit()
+    local winid = vim.api.nvim_get_current_win()
+    local controller = state.controllers[winid]
+    if controller == nil then
+        return
+    end
+
+    controller:quit()
+end
+
+function M.top()
+    local winid = vim.api.nvim_get_current_win()
+    local controller = state.controllers[winid]
+    if controller == nil then
+        return
+    end
+
+    controller.searcher:set_cursor(1)
+    controller:quit()
+end
+
+function M.middle()
+    local winid = vim.api.nvim_get_current_win()
+    local controller = state.controllers[winid]
+    if controller == nil then
+        return
+    end
+
+    controller.searcher:set_cursor(2)
+    controller:quit()
+end
+
+function M.bottom()
+    local winid = vim.api.nvim_get_current_win()
+    local controller = state.controllers[winid]
+    if controller == nil then
+        return
+    end
+
+    controller.searcher:set_cursor(3)
+    controller:quit()
+end
+
+function M.map(key, action)
+    state.mapping[key] = action
+end
+
+return M
