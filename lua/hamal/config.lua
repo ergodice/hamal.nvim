@@ -1,7 +1,6 @@
 return {
     quit_on_unmapped_keys = true,
     divisions = 3,
-    show_keytrans_keyname = false,
     keymaps = {
         ["q"] = function()
             require("hamal").quit()
