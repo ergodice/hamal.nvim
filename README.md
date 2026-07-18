@@ -60,10 +60,7 @@ Please note that `split` should be defined outside of `opt.keymaps` in the `setu
 ## Configuration
 
 ```lua
-local hamal = require("hamal")
-
-vim.keymap.set("n", "<leader><leader>", hamal.split)
-require("hamal").setup({
+{
     -- default configuration
     quit_on_unmapped_keys = true,
     divisions = 3,
