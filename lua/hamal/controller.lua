@@ -31,7 +31,6 @@ function Controller:split()
             end)
 
             if not state.opts.keymaps[keytrans] and state.opts.quit_on_unmapped_keys then
-                vim.notify("through")
                 return nil
             end
             return ""
