@@ -19,18 +19,18 @@ function Controller:split()
     self:highlight()
 
     -- takeover inputs
-    vim.on_key(function(key)
+    vim.on_key(function(_, key)
         if key ~= "" then
             local keytrans = vim.fn.keytrans(key)
             vim.schedule(function()
-                if state.opts.keymaps[keytrans] then
-                    state.opts.keymaps[keytrans]()
+                if state.opts.keymaps[vim.keycode(keytrans)] then
+                    state.opts.keymaps[vim.keycode(keytrans)]()
                 elseif state.opts.quit_on_unmapped_keys then
                     self:quit()
                 end
             end)
 
-            if not state.opts.keymaps[keytrans] and state.opts.quit_on_unmapped_keys then
+            if not state.opts.keymaps[vim.keycode(keytrans)] and state.opts.quit_on_unmapped_keys then
                 return nil
             end
             return ""

@@ -16,6 +16,14 @@ M.notify_warn = function(msg)
     })
 end
 
+M.notify_info = function(msg)
+    vim.notify(msg, vim.log.levels.INFO, {
+        icon = "",
+        title = "hamal.nvim",
+    })
+end
+
+
 M.assert = function(target, msg)
     if target == nil then
         M.notify_err(msg)

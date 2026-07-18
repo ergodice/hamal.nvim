@@ -1,6 +1,7 @@
 return {
     quit_on_unmapped_keys = true,
     divisions = 3,
+    show_keytrans_keyname = false,
     keymaps = {
         ["q"] = function()
             require("hamal").quit()
@@ -25,7 +26,7 @@ return {
             require("hamal").bottom()
         end,
 
-        ["<Cmd>"] = function()
+        ["<Esc>"] = function()
             require("hamal").pan_focus()
         end,
     },

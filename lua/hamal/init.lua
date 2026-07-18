@@ -12,6 +12,14 @@ function M.setup(opts)
     state.opts = vim.tbl_deep_extend("force", defaults, opts)
     state.ns = vim.api.nvim_create_namespace("hamal")
 
+    local normalized = {}
+
+    for lhs, rhs in pairs(state.opts.keymaps) do
+        normalized[vim.keycode(lhs)] = rhs
+    end
+
+    state.opts.keymaps = normalized
+
     for _, hl in ipairs(state.opts.highlights) do
         local name, spec = hl[1], hl[2]
         -- register highlights
