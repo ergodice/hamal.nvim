@@ -94,8 +94,4 @@ function M.bottom()
     controller:quit()
 end
 
-function M.map(key, action)
-    state.mapping[key] = action
-end
-
 return M
