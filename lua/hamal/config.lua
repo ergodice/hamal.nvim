@@ -38,8 +38,11 @@ return {
         end,
     },
     highlights = {
-        { "HamalTop", { link = "IncSearch" } },
-        { "HamalMid", { link = "Search" } },
-        { "HamalBot", { link = "CurSearch" } },
+        section = {
+            { "HamalFirstSection",  { link = "ColorColumn" } },
+            { "HamalSecondSection", {} },
+            { "HamalThridSection",  { link = "ColorColumn" } },
+        },
+        line = {},
     },
 }

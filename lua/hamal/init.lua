@@ -20,10 +20,32 @@ function M.setup(opts)
 
 	state.opts.keymaps = normalized
 
-	for _, hl in ipairs(state.opts.highlights) do
+    -- register highlights
+	for _, hl in ipairs(state.opts.highlights.section) do
 		local name, spec = hl[1], hl[2]
-		-- register highlights
-		vim.api.nvim_set_hl(0, name, spec)
+        if name and spec then
+            vim.api.nvim_set_hl(0, name, spec)
+        end
+	end
+
+	for _, var in ipairs(state.opts.highlights.line) do
+        if var.top or var.bottom then
+            require("hamal.utils").assert(var.top, "HL_NOT_DEFINED_CORRECTLY")
+            require("hamal.utils").assert(var.bottom, "HL_NOT_DEFINED_CORRECTLY")
+            local name_top, spec_top = var.top[1], var.top[2]
+            local name_bottom, spec_bottom = var.bottom[1], var.bottom[2]
+            if name_top and spec_top then
+                vim.api.nvim_set_hl(0, name_top, spec_top)
+            end
+            if name_bottom and spec_bottom then
+                vim.api.nvim_set_hl(0, name_bottom, spec_bottom)
+            end
+        else
+            local name, spec = var[1], var[2]
+            if name and spec then
+                vim.api.nvim_set_hl(0, name, spec)
+            end
+        end
 	end
 end
 
