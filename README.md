@@ -61,15 +61,23 @@ Please note that `split` should be defined outside of `opt.keymaps` in the `setu
 
 | Default Keys       | Description                                                        |
 | ------------------ | ------------------------------------------------------------------ |
-| `<leader><leader>` | Enter Hamal mode by splitting the current window.                   |
-| `H`                | Focus the top split.                                               |
-| `M`                | Focus the middle split.                                            |
-| `L`                | Focus the bottom split.                                            |
-| `<esc>`            | Return focus to the previously focused split.                      |
-| `h`                | Jump to the first line of the current region and exit Hamal mode.  |
-| `m`                | Jump to the middle line of the current region and exit Hamal mode. |
-| `l`                | Jump to the last line of the current region and exit Hamal mode.   |
-| `q`                | Exit Hamal mode without moving the cursor.                         |
+| `<leader><leader>` | Enter Hamal mode by splitting the current window.                  |
+| `h`                | Focus the top split.                                               |
+| `m`                | Focus the middle split.                                            |
+| `l`                | Focus the bottom split.                                            |
+| `-`                | Return focus to the previously focused split.                      |
+| `H`                | Jump to the first line of the current region and exit Hamal mode.  |
+| `M`                | Jump to the middle line of the current region and exit Hamal mode. |
+| `L`                | Jump to the last line of the current region and exit Hamal mode.   |
+| `s`                | Select the current split.                                          |
+| `<esc>`            | Exit Hamal mode without moving the cursor.                         |
+
+Hamal mode also works in operator-pending mode.
+
+In the default configuration, `d<leader><leader><split>s` deletes the contents of the current split.
+
+Linewise motions can also be passed to the pending operator.
+For example, `y<leader><leader><motion>` yanks from the starting line to the destination line.
 
 ## Configuration
 
@@ -79,30 +87,38 @@ Please note that `split` should be defined outside of `opt.keymaps` in the `setu
     quit_on_unmapped_keys = true,
     divisions = 3,
     keymaps = {
-        ["q"] = function()
+        ["<esc>"] = function()
             require("hamal").quit()
-        end,
-        ["H"] = function()
-            require("hamal").focus(1)
-        end,
-        ["M"] = function()
-            require("hamal").focus(2)
-        end,
-        ["L"] = function()
-            require("hamal").focus(3)
         end,
 
         ["h"] = function()
-            require("hamal").top()
+            require("hamal").focus(1)
         end,
         ["m"] = function()
-            require("hamal").middle()
+            require("hamal").focus(2)
         end,
         ["l"] = function()
-            require("hamal").bottom()
+            require("hamal").focus(3)
         end,
 
-        ["<Esc>"] = function()
+        ["s"] = function()
+            require("hamal").select()
+        end,
+
+        ["H"] = function()
+            require("hamal").top()
+            require("hamal").quit()
+        end,
+        ["M"] = function()
+            require("hamal").middle()
+            require("hamal").quit()
+        end,
+        ["L"] = function()
+            require("hamal").bottom()
+            require("hamal").quit()
+        end,
+
+        ["-"] = function()
             require("hamal").pan_focus()
         end,
     },
@@ -111,7 +127,7 @@ Please note that `split` should be defined outside of `opt.keymaps` in the `setu
         { "HamalMid", { link = "Search" } },
         { "HamalBot", { link = "CurSearch" } },
     },
-})
+}
 ```
 
 ## Public API
@@ -121,7 +137,8 @@ Please note that `split` should be defined outside of `opt.keymaps` in the `setu
 | `split()`      | Enter hamal mode by dividing the current window. Usually mapped to a key outside of `setup()`. |
 | `focus(index)` | Focus the `index`-th region of the current split (1 <= index <= divisions).                    |
 | `pan_focus()`  | Focus the parent region (the previous split level).                                            |
-| `top()`        | Jump to the first line of the current region and exit hamal mode.                              |
-| `middle()`     | Jump to the middle line of the current region and exit hamal mode.                             |
-| `bottom()`     | Jump to the last line of the current region and exit hamal mode.                               |
+| `top()`        | Jump to the first line of the current region.                                                  |
+| `middle()`     | Jump to the middle line of the current region.                                                 |
+| `bottom()`     | Jump to the last line of the current region.                                                   |
 | `quit()`       | Exit hamal mode without moving the cursor.                                                     |
+| `select()`     | Select the current split.                                                                      |
