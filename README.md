@@ -47,7 +47,7 @@ A minimal usage example is as follows.
         -- keymaps
         vim.keymap.set("n", "<leader><leader>", hamal.split)
         -- you can also use hamal in visual mode
-        -- vim.keymap.set("v", "<leader><leader>", hamal.split) 
+        -- vim.keymap.set("v", "<leader><leader>", hamal.split)
 
         -- You must call hamal.setup() at least once.
         hamal.setup({})
@@ -56,6 +56,20 @@ A minimal usage example is as follows.
 ```
 
 Please note that `split` should be defined outside of `opt.keymaps` in the `setup` argument.
+
+#### Default Keymap
+
+| Default Keys       | Description                                                        |
+| ------------------ | ------------------------------------------------------------------ |
+| `<leader><leader>` | Enter Hamal mode by splitting the current window.                   |
+| `H`                | Focus the top split.                                               |
+| `M`                | Focus the middle split.                                            |
+| `L`                | Focus the bottom split.                                            |
+| `<esc>`            | Return focus to the previously focused split.                      |
+| `h`                | Jump to the first line of the current region and exit Hamal mode.  |
+| `m`                | Jump to the middle line of the current region and exit Hamal mode. |
+| `l`                | Jump to the last line of the current region and exit Hamal mode.   |
+| `q`                | Exit Hamal mode without moving the cursor.                         |
 
 ## Configuration
 
@@ -102,12 +116,12 @@ Please note that `split` should be defined outside of `opt.keymaps` in the `setu
 
 ## Public API
 
-| Function | Description |
-|----------|-------------|
-| `split()` | Enter hamal mode by dividing the current window. Usually mapped to a key outside of `setup()`. |
-| `focus(index)` | Focus the `index`-th region of the current split (1 <= index <= divisions). |
-| `pan_focus()` | Focus the parent region (the previous split level). |
-| `top()` | Jump to the first line of the current region and exit hamal mode. |
-| `middle()` | Jump to the middle line of the current region and exit hamal mode. |
-| `bottom()` | Jump to the last line of the current region and exit hamal mode. |
-| `quit()` | Exit hamal mode without moving the cursor. |
+| Function       | Description                                                                                    |
+| -------------- | ---------------------------------------------------------------------------------------------- |
+| `split()`      | Enter hamal mode by dividing the current window. Usually mapped to a key outside of `setup()`. |
+| `focus(index)` | Focus the `index`-th region of the current split (1 <= index <= divisions).                    |
+| `pan_focus()`  | Focus the parent region (the previous split level).                                            |
+| `top()`        | Jump to the first line of the current region and exit hamal mode.                              |
+| `middle()`     | Jump to the middle line of the current region and exit hamal mode.                             |
+| `bottom()`     | Jump to the last line of the current region and exit hamal mode.                               |
+| `quit()`       | Exit hamal mode without moving the cursor.                                                     |
