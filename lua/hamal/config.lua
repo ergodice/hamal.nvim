@@ -2,30 +2,38 @@ return {
     quit_on_unmapped_keys = true,
     divisions = 3,
     keymaps = {
-        ["q"] = function()
+        ["<esc>"] = function()
             require("hamal").quit()
-        end,
-        ["H"] = function()
-            require("hamal").focus(1)
-        end,
-        ["M"] = function()
-            require("hamal").focus(2)
-        end,
-        ["L"] = function()
-            require("hamal").focus(3)
         end,
 
         ["h"] = function()
-            require("hamal").top()
+            require("hamal").focus(1)
         end,
         ["m"] = function()
-            require("hamal").middle()
+            require("hamal").focus(2)
         end,
         ["l"] = function()
-            require("hamal").bottom()
+            require("hamal").focus(3)
         end,
 
-        ["<Esc>"] = function()
+        ["s"] = function()
+            require("hamal").select()
+        end,
+
+        ["H"] = function()
+            require("hamal").top()
+            require("hamal").quit()
+        end,
+        ["M"] = function()
+            require("hamal").middle()
+            require("hamal").quit()
+        end,
+        ["L"] = function()
+            require("hamal").bottom()
+            require("hamal").quit()
+        end,
+
+        ["-"] = function()
             require("hamal").pan_focus()
         end,
     },

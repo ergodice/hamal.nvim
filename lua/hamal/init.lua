@@ -8,98 +8,100 @@ local Controller = require("hamal.controller")
 local Searcher = require("hamal.searcher")
 
 function M.setup(opts)
-    opts = opts or {}
-    state.opts = vim.tbl_deep_extend("force", defaults, opts)
-    state.ns = vim.api.nvim_create_namespace("hamal")
+	opts = opts or {}
+	state.opts = vim.tbl_deep_extend("force", defaults, opts)
+	state.ns = vim.api.nvim_create_namespace("hamal")
 
-    local normalized = {}
+	local normalized = {}
 
-    for lhs, rhs in pairs(state.opts.keymaps) do
-        normalized[vim.keycode(lhs)] = rhs
-    end
+	for lhs, rhs in pairs(state.opts.keymaps) do
+		normalized[vim.keycode(lhs)] = rhs
+	end
 
-    state.opts.keymaps = normalized
+	state.opts.keymaps = normalized
 
-    for _, hl in ipairs(state.opts.highlights) do
-        local name, spec = hl[1], hl[2]
-        -- register highlights
-        vim.api.nvim_set_hl(0, name, spec)
-    end
+	for _, hl in ipairs(state.opts.highlights) do
+		local name, spec = hl[1], hl[2]
+		-- register highlights
+		vim.api.nvim_set_hl(0, name, spec)
+	end
 end
 
 function M.split()
-    local winid = vim.api.nvim_get_current_win()
-    local split, err = split_utils.displayed_lines(winid)
-    require("hamal.utils").assert(split, err)
+	local winid = vim.api.nvim_get_current_win()
+	local split, err = split_utils.displayed_lines(winid)
+	require("hamal.utils").assert(split, err)
 
-    local searcher = Searcher.new(winid, state.opts.divisions, split)
-    local controller = Controller.new(searcher)
+	local searcher = Searcher.new(winid, state.opts.divisions, split)
+	local controller = Controller.new(searcher)
 
-    state.controllers[winid] = controller
-    controller:split()
+	state.controllers[winid] = controller
+	controller:split()
+end
+
+local function get_controller()
+	local winid = vim.api.nvim_get_current_win()
+	local controller = state.controllers[winid]
+	return controller
 end
 
 function M.focus(index)
-    local winid = vim.api.nvim_get_current_win()
-    local controller = state.controllers[winid]
-    if controller == nil then
-        return
-    end
-
-    controller:focus(index)
+	local controller = get_controller()
+	if controller == nil then
+		return
+	end
+	controller:focus(index)
 end
 
 function M.pan_focus()
-    local winid = vim.api.nvim_get_current_win()
-    local controller = state.controllers[winid]
-    if controller == nil then
-        return
-    end
+	local controller = get_controller()
+	if controller == nil then
+		return
+	end
 
-    controller:pan_focus()
+	controller:pan_focus()
 end
 
 function M.quit()
-    local winid = vim.api.nvim_get_current_win()
-    local controller = state.controllers[winid]
-    if controller == nil then
-        return
-    end
-
-    controller:quit()
+	local controller = get_controller()
+	if controller == nil then
+		return
+	end
+	controller:quit()
 end
 
 function M.top()
-    local winid = vim.api.nvim_get_current_win()
-    local controller = state.controllers[winid]
-    if controller == nil then
-        return
-    end
-
-    controller.searcher:set_cursor(1)
-    controller:quit()
+	local controller = get_controller()
+	if controller == nil then
+		return
+	end
+	controller.searcher:set_cursor(1)
 end
 
 function M.middle()
-    local winid = vim.api.nvim_get_current_win()
-    local controller = state.controllers[winid]
-    if controller == nil then
-        return
-    end
+	local controller = get_controller()
+	if controller == nil then
+		return
+	end
 
-    controller.searcher:set_cursor(2)
-    controller:quit()
+	controller.searcher:set_cursor(2)
 end
 
 function M.bottom()
-    local winid = vim.api.nvim_get_current_win()
-    local controller = state.controllers[winid]
-    if controller == nil then
-        return
-    end
+	local controller = get_controller()
+	if controller == nil then
+		return
+	end
 
-    controller.searcher:set_cursor(3)
-    controller:quit()
+	controller.searcher:set_cursor(3)
+end
+
+function M.select()
+	local controller = get_controller()
+	if controller == nil then
+		return
+	end
+	controller:select()
 end
 
 return M
