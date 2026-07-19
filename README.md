@@ -46,6 +46,7 @@ A minimal usage example is as follows.
 
         -- keymaps
         vim.keymap.set("n", "<leader><leader>", hamal.split)
+        vim.keymap.set("o", "<leader><leader>", hamal.split) -- To use hamal mode in the o-pending mode.
         -- you can also use hamal in visual mode
         -- vim.keymap.set("v", "<leader><leader>", hamal.split)
 
