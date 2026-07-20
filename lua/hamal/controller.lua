@@ -83,7 +83,7 @@ function Controller:select()
     self:quit()
 end
 
--- hilights
+-- highlights
 local function highlight_line(bufnr, line, hl)
     vim.api.nvim_buf_set_extmark(bufnr, ns, line - 1, 0, {
         line_hl_group = hl,
@@ -109,7 +109,7 @@ function Controller:highlight()
 
     local number_of_highlights = {
         ["section"] = vim.tbl_count(state.opts.highlights.section),
-        ["line"] = vim.tbl_count(state.opts.highlights.line),
+        ["border"] = vim.tbl_count(state.opts.highlights.border),
     }
 
     local get_hl = function(tbl, div)
@@ -132,14 +132,14 @@ function Controller:highlight()
                 section_hl[index_of_hl_name]
             )
         end
-        local line_hl = get_hl("line", div)
-        if line_hl then
-            if line_hl.top and line_hl.bottom then
-                highlight_line(self.searcher.bufnr, children[div]:top(), line_hl.top[index_of_hl_name])
-                highlight_line(self.searcher.bufnr, children[div]:bottom(), line_hl.bottom[index_of_hl_name])
+        local border_hl = get_hl("border", div)
+        if border_hl then
+            if border_hl.top and border_hl.bottom then
+                highlight_line(self.searcher.bufnr, children[div]:top(), border_hl.top[index_of_hl_name])
+                highlight_line(self.searcher.bufnr, children[div]:bottom(), border_hl.bottom[index_of_hl_name])
             else
-                highlight_line(self.searcher.bufnr, children[div]:top(), line_hl[index_of_hl_name])
-                highlight_line(self.searcher.bufnr, children[div]:bottom(), line_hl[index_of_hl_name])
+                highlight_line(self.searcher.bufnr, children[div]:top(), border_hl[index_of_hl_name])
+                highlight_line(self.searcher.bufnr, children[div]:bottom(), border_hl[index_of_hl_name])
             end
         end
         vim.cmd.redraw()

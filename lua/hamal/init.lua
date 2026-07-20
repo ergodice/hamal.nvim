@@ -15,8 +15,8 @@ function M.setup(opts)
         if opts.highlights.section then
             state.opts.highlights.section = opts.highlights.section
         end
-        if opts.highlights.line then
-            state.opts.highlights.line = opts.highlights.line
+        if opts.highlights.border then
+            state.opts.highlights.border = opts.highlights.border
         end
     end
 
@@ -38,7 +38,7 @@ function M.setup(opts)
         end
     end
 
-    for _, var in ipairs(state.opts.highlights.line) do
+    for _, var in ipairs(state.opts.highlights.border) do
         if var.top or var.bottom then
             require("hamal.utils").assert(var.top, "HL_NOT_DEFINED_CORRECTLY")
             require("hamal.utils").assert(var.bottom, "HL_NOT_DEFINED_CORRECTLY")

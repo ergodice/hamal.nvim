@@ -42,6 +42,6 @@ return {
             { "HamalFirstSection",  { link = "ColorColumn" } },
             { "HamalSecondSection", {} },
         },
-        line = {},
+        border = {},
     },
 }
