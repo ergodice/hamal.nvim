@@ -8,27 +8,37 @@ local Controller = require("hamal.controller")
 local Searcher = require("hamal.searcher")
 
 function M.setup(opts)
-	opts = opts or {}
-	state.opts = vim.tbl_deep_extend("force", defaults, opts)
-	state.ns = vim.api.nvim_create_namespace("hamal")
+    opts = opts or {}
+    state.opts = vim.tbl_deep_extend("force", defaults, opts)
+    -- highlights should be hard copy
+    if opts.highlights then
+        if opts.highlights.section then
+            state.opts.highlights.section = opts.highlights.section
+        end
+        if opts.highlights.line then
+            state.opts.highlights.line = opts.highlights.line
+        end
+    end
 
-	local normalized = {}
+    state.ns = vim.api.nvim_create_namespace("hamal")
 
-	for lhs, rhs in pairs(state.opts.keymaps) do
-		normalized[vim.keycode(lhs)] = rhs
-	end
+    local normalized = {}
 
-	state.opts.keymaps = normalized
+    for lhs, rhs in pairs(state.opts.keymaps) do
+        normalized[vim.keycode(lhs)] = rhs
+    end
+
+    state.opts.keymaps = normalized
 
     -- register highlights
-	for _, hl in ipairs(state.opts.highlights.section) do
-		local name, spec = hl[1], hl[2]
+    for _, hl in ipairs(state.opts.highlights.section) do
+        local name, spec = hl[1], hl[2]
         if name and spec then
             vim.api.nvim_set_hl(0, name, spec)
         end
-	end
+    end
 
-	for _, var in ipairs(state.opts.highlights.line) do
+    for _, var in ipairs(state.opts.highlights.line) do
         if var.top or var.bottom then
             require("hamal.utils").assert(var.top, "HL_NOT_DEFINED_CORRECTLY")
             require("hamal.utils").assert(var.bottom, "HL_NOT_DEFINED_CORRECTLY")
@@ -46,84 +56,84 @@ function M.setup(opts)
                 vim.api.nvim_set_hl(0, name, spec)
             end
         end
-	end
+    end
 end
 
 function M.split()
-	local winid = vim.api.nvim_get_current_win()
-	local split, err = split_utils.displayed_lines(winid)
-	require("hamal.utils").assert(split, err)
+    local winid = vim.api.nvim_get_current_win()
+    local split, err = split_utils.displayed_lines(winid)
+    require("hamal.utils").assert(split, err)
 
-	local searcher = Searcher.new(winid, state.opts.divisions, split)
-	local controller = Controller.new(searcher)
+    local searcher = Searcher.new(winid, state.opts.divisions, split)
+    local controller = Controller.new(searcher)
 
-	state.controllers[winid] = controller
-	controller:split()
+    state.controllers[winid] = controller
+    controller:split()
 end
 
 local function get_controller()
-	local winid = vim.api.nvim_get_current_win()
-	local controller = state.controllers[winid]
-	return controller
+    local winid = vim.api.nvim_get_current_win()
+    local controller = state.controllers[winid]
+    return controller
 end
 
 function M.focus(index)
-	local controller = get_controller()
-	if controller == nil then
-		return
-	end
-	controller:focus(index)
+    local controller = get_controller()
+    if controller == nil then
+        return
+    end
+    controller:focus(index)
 end
 
 function M.pan_focus()
-	local controller = get_controller()
-	if controller == nil then
-		return
-	end
+    local controller = get_controller()
+    if controller == nil then
+        return
+    end
 
-	controller:pan_focus()
+    controller:pan_focus()
 end
 
 function M.quit()
-	local controller = get_controller()
-	if controller == nil then
-		return
-	end
-	controller:quit()
+    local controller = get_controller()
+    if controller == nil then
+        return
+    end
+    controller:quit()
 end
 
 function M.top()
-	local controller = get_controller()
-	if controller == nil then
-		return
-	end
-	controller.searcher:set_cursor(1)
+    local controller = get_controller()
+    if controller == nil then
+        return
+    end
+    controller.searcher:set_cursor(1)
 end
 
 function M.middle()
-	local controller = get_controller()
-	if controller == nil then
-		return
-	end
+    local controller = get_controller()
+    if controller == nil then
+        return
+    end
 
-	controller.searcher:set_cursor(2)
+    controller.searcher:set_cursor(2)
 end
 
 function M.bottom()
-	local controller = get_controller()
-	if controller == nil then
-		return
-	end
+    local controller = get_controller()
+    if controller == nil then
+        return
+    end
 
-	controller.searcher:set_cursor(3)
+    controller.searcher:set_cursor(3)
 end
 
 function M.select()
-	local controller = get_controller()
-	if controller == nil then
-		return
-	end
-	controller:select()
+    local controller = get_controller()
+    if controller == nil then
+        return
+    end
+    controller:select()
 end
 
 return M
