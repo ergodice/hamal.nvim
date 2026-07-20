@@ -41,7 +41,6 @@ return {
         section = {
             { "HamalFirstSection",  { link = "ColorColumn" } },
             { "HamalSecondSection", {} },
-            { "HamalThridSection",  { link = "ColorColumn" } },
         },
         line = {},
     },
