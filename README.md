@@ -83,8 +83,8 @@ For example, `y<leader><leader><motion>` yanks from the starting line to the des
 ## Configuration
 
 ```lua
+-- default configuration
 {
-    -- default configuration
     quit_on_unmapped_keys = true,
     divisions = 3,
     keymaps = {
@@ -124,10 +124,53 @@ For example, `y<leader><leader><motion>` yanks from the starting line to the des
         end,
     },
     highlights = {
-        { "HamalTop", { link = "IncSearch" } },
-        { "HamalMid", { link = "Search" } },
-        { "HamalBot", { link = "CurSearch" } },
+        section = {
+            { "HamalFirstSection",  { link = "ColorColumn" } },
+            { "HamalSecondSection", {} },
+        },
+        line = {},
     },
+}
+```
+
+#### Keymaps
+
+You can customize `keymaps` freely.
+
+The table uses the format `[<key>] = <function>`. To disable a keymap, set it to `[<key>] = false`.
+
+#### Custom highlights
+
+You can freely define your own `highlights`.
+
+Highlights are applied in order, regardless of their names. If fewer highlight groups are provided than there are splits, the highlight groups are reused in a loop.
+
+For example, you can define your own highlight group like this. Since this example defines only one highlight group, all sections will be rendered with the same color.
+
+```lua
+highlights = {
+    section = {
+        { "HamalMyCustomSection",  { fg = "#88c0d0" } },
+    }
+}
+```
+
+You can also customize the highlight group used for section borders with `border`.
+
+Like `section`, each entry can be defined as a `{ <name>, <spec> }` pair.
+
+Alternatively, you can define separate highlight groups for the top and bottom borders:
+
+```lua
+highlights = {
+    border = {
+        {
+            -- you have to set both, top and bottom
+            top = { "HamalFirstBorderTop",  { link = "ColorColumn" } },
+            bottom = { "HamalFirstBorderBottom",  { link = "Search" } },
+        },
+        { "HamalSecondBorder", {} },
+    }
 }
 ```
 
